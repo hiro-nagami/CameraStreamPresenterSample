@@ -66,7 +66,7 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.presenter.isEditmode = true
         picker.dismiss(animated: true, completion: {
-            self.navigationController?.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         })
     }
 }
@@ -74,7 +74,7 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
 extension CameraViewController: TOCropViewControllerDelegate {
     func cropViewController(_ cropViewController: TOCropViewController, didCropToRect cropRect: CGRect, angle: Int) {
         cropViewController.dismiss(animated: true, completion: {
-            self.navigationController?.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             self.presenter.delegate?.didTakeImage(image: cropViewController.image)
         })
     }
