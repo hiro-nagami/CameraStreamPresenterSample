@@ -17,7 +17,6 @@
 		E8074FAB1FB93AC900DD6AE3 /* CameraStreamPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074FAA1FB93AC900DD6AE3 /* CameraStreamPresenter.swift */; };
 		E8074FAD1FB93B3700DD6AE3 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074FAC1FB93B3700DD6AE3 /* CameraViewController.swift */; };
 		E8074FB01FB93E2D00DD6AE3 /* StoryboardBuilder_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8074FAF1FB93E2D00DD6AE3 /* StoryboardBuilder_iOS.framework */; };
-		E8074FB31FB93E9D00DD6AE3 /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8074FB21FB93E9D00DD6AE3 /* CropViewController.swift */; };
 		E8074FB51FB942DE00DD6AE3 /* TOCropViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8074FB41FB942DE00DD6AE3 /* TOCropViewController.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +54,6 @@
 		E8074FAA1FB93AC900DD6AE3 /* CameraStreamPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraStreamPresenter.swift; sourceTree = "<group>"; };
 		E8074FAC1FB93B3700DD6AE3 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		E8074FAF1FB93E2D00DD6AE3 /* StoryboardBuilder_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoryboardBuilder_iOS.framework; path = Carthage/Build/iOS/StoryboardBuilder_iOS.framework; sourceTree = "<group>"; };
-		E8074FB21FB93E9D00DD6AE3 /* CropViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
 		E8074FB41FB942DE00DD6AE3 /* TOCropViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TOCropViewController.framework; path = Carthage/Build/iOS/TOCropViewController.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,7 +112,6 @@
 				E8074F7E1FB93A9A00DD6AE3 /* ViewController.swift */,
 				E8074FAA1FB93AC900DD6AE3 /* CameraStreamPresenter.swift */,
 				E8074FAC1FB93B3700DD6AE3 /* CameraViewController.swift */,
-				E8074FB21FB93E9D00DD6AE3 /* CropViewController.swift */,
 				E8074F801FB93A9A00DD6AE3 /* Main.storyboard */,
 				E8074F831FB93A9A00DD6AE3 /* Assets.xcassets */,
 				E8074F851FB93A9A00DD6AE3 /* LaunchScreen.storyboard */,
@@ -304,7 +301,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8074FAB1FB93AC900DD6AE3 /* CameraStreamPresenter.swift in Sources */,
-				E8074FB31FB93E9D00DD6AE3 /* CropViewController.swift in Sources */,
 				E8074FAD1FB93B3700DD6AE3 /* CameraViewController.swift in Sources */,
 				E8074F7F1FB93A9A00DD6AE3 /* ViewController.swift in Sources */,
 				E8074F7D1FB93A9A00DD6AE3 /* AppDelegate.swift in Sources */,

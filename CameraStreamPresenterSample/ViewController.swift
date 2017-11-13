@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import TOCropViewController
 
 class ViewController: UIViewController {
     @IBOutlet weak var camerabutton: UIButton!
-    var presenter = CameraStreamPresenter()
-
+    @IBOutlet weak var imageView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.camerabutton.addTarget(self, action: #selector(tappedCameraButton), for: .touchUpInside)
@@ -24,31 +23,17 @@ class ViewController: UIViewController {
     }
     
     @objc func tappedCameraButton() {
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-            let picker = UIImagePickerController()
-            picker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-            picker.sourceType = UIImagePickerControllerSourceType.camera
-            picker.delegate = self
-            
-            self.present(picker, animated: true, completion: nil)
-        }
+        let cameraPresenter = CameraStreamPresenter()
+        cameraPresenter.delegate = self
+        let cameraVC = CameraViewController(presenter: cameraPresenter)
+        let navCon = UINavigationController(rootViewController: cameraVC)
+        self.present(navCon, animated: true, completion: nil)
     }
 }
 
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            let presenter = CameraStreamPresenter()
-            presenter.image = pickedImage
-            picker.dismiss(animated: true, completion: nil)
-            
-            let vc = TOCropViewController(croppingStyle: .default, image: presenter.image!)
-            vc.aspectRatioLockEnabled = true
-            vc.resetAspectRatioEnabled = false
-            vc.aspectRatioPickerButtonHidden = true
-            vc.setAspectRatioPresent(.preset4x3, animated: true)
-            self.present(vc, animated: true, completion: nil)
-        }
+extension ViewController: CameraStreamPresenterDelegate {
+    func didTakeImage(image: UIImage) {
+        self.imageView.image = image
     }
 }
 

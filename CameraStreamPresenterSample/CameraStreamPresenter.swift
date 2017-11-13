@@ -9,11 +9,16 @@
 import Foundation
 import UIKit
 
-protocol CameraStreamPresenterProtocol {
-    var image: UIImage? { get set }
+protocol CameraStreamPresenterDelegate {
+    func didTakeImage(image: UIImage)
 }
 
+protocol CameraStreamPresenterProtocol {
+    var delegate: CameraStreamPresenterDelegate? { set get }
+    var isEditmode: Bool { get set }
+}
 
 class CameraStreamPresenter: CameraStreamPresenterProtocol {
-    var image: UIImage?
+    var delegate: CameraStreamPresenterDelegate?
+    var isEditmode: Bool = false
 }

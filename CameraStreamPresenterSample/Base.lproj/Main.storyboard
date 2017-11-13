@@ -18,27 +18,50 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OB5-c0-Zlk">
-                                <rect key="frame" x="120" y="293.5" width="135" height="80"/>
-                                <color key="backgroundColor" red="0.66150460025380708" green="0.66150460025380708" blue="0.66150460025380708" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qIM-aY-ETS">
+                                <rect key="frame" x="16" y="60.5" width="343" height="546"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OB5-c0-Zlk">
+                                        <rect key="frame" x="104" y="50" width="135" height="80"/>
+                                        <color key="backgroundColor" red="0.66150460025380708" green="0.66150460025380708" blue="0.66150460025380708" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="135" id="UgD-u9-4lL"/>
+                                            <constraint firstAttribute="height" constant="80" id="o5z-Fw-5PC"/>
+                                        </constraints>
+                                        <state key="normal" title="Take photo">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o5U-qB-6nf">
+                                        <rect key="frame" x="51" y="185" width="240" height="314"/>
+                                        <color key="backgroundColor" red="0.86669051649999995" green="0.86667418480000002" blue="0.86668527129999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="240" id="5xL-f8-AiB"/>
+                                            <constraint firstAttribute="height" constant="314" id="ege-Ig-C4i"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86669051649999995" green="0.86667418480000002" blue="0.86668527129999995" alpha="0.0" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="18t-FY-biC"/>
-                                    <constraint firstAttribute="width" constant="135" id="hmM-lg-VVH"/>
+                                    <constraint firstItem="o5U-qB-6nf" firstAttribute="centerX" secondItem="qIM-aY-ETS" secondAttribute="centerX" id="Ow3-lc-uMn"/>
+                                    <constraint firstItem="OB5-c0-Zlk" firstAttribute="top" secondItem="qIM-aY-ETS" secondAttribute="top" constant="50" id="gwm-LW-dnH"/>
+                                    <constraint firstAttribute="height" constant="546" id="khR-Zm-VZz"/>
+                                    <constraint firstItem="OB5-c0-Zlk" firstAttribute="centerX" secondItem="qIM-aY-ETS" secondAttribute="centerX" id="lRs-C3-ink"/>
+                                    <constraint firstItem="o5U-qB-6nf" firstAttribute="top" secondItem="OB5-c0-Zlk" secondAttribute="bottom" constant="55" id="ljZ-Oq-Gvj"/>
+                                    <constraint firstAttribute="width" constant="343" id="rcQ-xK-6b7"/>
                                 </constraints>
-                                <state key="normal" title="Take photo">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="OB5-c0-Zlk" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="KDV-Ga-wL4"/>
-                            <constraint firstItem="OB5-c0-Zlk" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YzE-Tm-VX5"/>
+                            <constraint firstItem="qIM-aY-ETS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4Kg-uL-tks"/>
+                            <constraint firstItem="qIM-aY-ETS" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="qpM-W9-VTc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="camerabutton" destination="OB5-c0-Zlk" id="70n-3a-g1Y"/>
+                        <outlet property="imageView" destination="o5U-qB-6nf" id="Gvk-pZ-Mjx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
