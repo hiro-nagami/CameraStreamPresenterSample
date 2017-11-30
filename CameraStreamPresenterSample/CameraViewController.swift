@@ -9,6 +9,9 @@
 import Foundation
 import TOCropViewController
 import UIKit
+import AVKit
+import MobileCoreServices
+import Photos
 
 class CameraViewController: UIViewController {
     var presenter: CameraStreamPresenterProtocol
@@ -37,13 +40,62 @@ class CameraViewController: UIViewController {
     func openCamera() {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
             let picker = UIImagePickerController()
-            picker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-            picker.sourceType = UIImagePickerControllerSourceType.camera
+            picker.modalPresentationStyle = .fullScreen
+            picker.sourceType = .camera
+            picker.mediaTypes = [kUTTypeMovie] as [String]
             picker.delegate = self
             picker.modalTransitionStyle = .crossDissolve
             
             self.present(picker, animated: true, completion: nil)
         }
+    }
+    
+    func saveImage(image: UIImage) -> URL? {
+        let fileManager = FileManager.default
+        var newAssetURL: URL? = nil
+        
+        let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let filePath = "\(rootPath)/image.jpg"
+        
+        let imageData = UIImageJPEGRepresentation(image, 1.0)
+        
+        if fileManager.createFile(atPath: filePath, contents: imageData, attributes: nil) {
+            print("Created file")
+        }
+        
+        if (fileManager.fileExists(atPath: filePath)){
+            newAssetURL = URL(fileURLWithPath: filePath)
+        }
+        
+        return newAssetURL
+    }
+    
+    func saveVideo(fileUrl: URL) -> URL? {
+        let fileManager = FileManager.default
+        var newAssetURL: URL? = nil
+        
+        let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+        let filePath = "\(rootPath)/video.mp4"
+        
+        let data = try! Data(contentsOf: fileUrl)
+        
+        if fileManager.createFile(atPath: filePath, contents: data, attributes: nil) {
+            print("Created file")
+        }
+        
+        if (fileManager.fileExists(atPath: filePath)){
+            newAssetURL = URL(fileURLWithPath: filePath)
+        }
+        
+        return newAssetURL
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape
     }
 }
 
@@ -61,6 +113,16 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
             self.presenter.isEditmode = true
             self.present(vc, animated: true, completion: nil)
         }
+        else if let movieURL = info[UIImagePickerControllerMediaURL] as? URL {
+            self.presenter.movieURL = self.saveVideo(fileUrl: movieURL)
+            self.presenter.delegate?.didFinishCamera()
+            
+            self.presenter.isEditmode = true
+            
+            picker.dismiss(animated: true, completion: {
+                self.dismiss(animated: true, completion: nil)
+            })
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -72,10 +134,10 @@ extension CameraViewController: UIImagePickerControllerDelegate, UINavigationCon
 }
 
 extension CameraViewController: TOCropViewControllerDelegate {
-    func cropViewController(_ cropViewController: TOCropViewController, didCropToRect cropRect: CGRect, angle: Int) {
+    func cropViewController(_ cropViewController: TOCropViewController, didCropImageToRect cropRect: CGRect, angle: Int) {
         cropViewController.dismiss(animated: true, completion: {
+            self.presenter.imageURL = self.saveImage(image: cropViewController.image)
             self.dismiss(animated: true, completion: nil)
-            self.presenter.delegate?.didTakeImage(image: cropViewController.image)
         })
     }
     
@@ -85,5 +147,4 @@ extension CameraViewController: TOCropViewControllerDelegate {
             cropViewController.dismiss(animated: true, completion: nil)
         }
     }
-
 }

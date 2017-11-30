@@ -6,6 +6,8 @@
 	<string>Please allow to access library.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Please allow to access camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Please allow to access microphone.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

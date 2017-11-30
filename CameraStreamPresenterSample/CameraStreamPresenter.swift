@@ -8,17 +8,22 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 protocol CameraStreamPresenterDelegate {
-    func didTakeImage(image: UIImage)
+    func didFinishCamera()
 }
 
 protocol CameraStreamPresenterProtocol {
     var delegate: CameraStreamPresenterDelegate? { set get }
     var isEditmode: Bool { get set }
+    var imageURL: URL? { get set }
+    var movieURL: URL? { get set }
 }
 
 class CameraStreamPresenter: CameraStreamPresenterProtocol {
     var delegate: CameraStreamPresenterDelegate?
     var isEditmode: Bool = false
+    var imageURL: URL?
+    var movieURL: URL?
 }
