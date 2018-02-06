@@ -18,7 +18,7 @@ class PreviewView: UIImageView {
 
     var videoPreviewLayer: AVCaptureVideoPreviewLayer {
         let previewlayer = layer as! AVCaptureVideoPreviewLayer
-        previewlayer.videoGravity = .resizeAspect
+        previewlayer.videoGravity = .resizeAspectFill
         return previewlayer
     }
 
@@ -49,8 +49,13 @@ class CameraViewController: UIViewController {
 
     let session = AVCaptureSession()
     let sessionQueue = DispatchQueue(label: "session queue", attributes: [])
+    let videoOutput = AVCapturePhotoOutput()
 
-    
+
+    lazy var rightBarButtonItem: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "take", style: .plain, target: self, action: #selector(takeImage))
+        return button
+    }()
 
     init(presenter: CameraStreamPresenterProtocol) {
         self.presenter = presenter
@@ -81,16 +86,19 @@ class CameraViewController: UIViewController {
 
     // Configuration
     private func configureViews() {
-        self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.rightBarButtonItem = self.rightBarButtonItem
 
-        self.preview.frame = self.view.bounds
+        let previewWidth = self.view.bounds.width
+        let previewHeight = previewWidth * 3.0 / 4.0
+        self.preview.frame = CGRect(x: 0, y: 100, width: previewWidth, height: previewHeight)
         self.view.addSubview(self.preview)
     }
 
     private func configureSession() {
         session.beginConfiguration()
-        session.sessionPreset = .hd1920x1080
-        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+//        session.sessionPreset = .high
+        guard let device = AVCaptureDevice.default(for: .video),
             let deviceInput = try? AVCaptureDeviceInput(device: device),
             session.canAddInput(deviceInput) else {
                 return
@@ -100,7 +108,6 @@ class CameraViewController: UIViewController {
     }
 
     private func addPhotoOutput() {
-        let videoOutput = AVCaptureVideoDataOutput()
 
         if self.session.canAddOutput(videoOutput) {
             self.session.addOutput(videoOutput)
@@ -126,6 +133,45 @@ class CameraViewController: UIViewController {
         sessionQueue.async { [unowned self] in
             self.configureSession()
         }
+    }
+
+    @objc private func takeImage() {
+        DispatchQueue.global(qos: .default).async(execute: { () -> Void in
+            let settingsForMonitoring = AVCapturePhotoSettings()
+            settingsForMonitoring.flashMode = .auto
+            settingsForMonitoring.isAutoStillImageStabilizationEnabled = true
+            settingsForMonitoring.isHighResolutionPhotoEnabled = false
+
+            self.videoOutput.capturePhoto(with: settingsForMonitoring, delegate: self)
+//            imageOutput.captureStillImageAsynchronously(from: connection!) { (buffer, error) -> Void in
+//
+//                self.stopCamera()
+//
+//                guard let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer!),
+//                    let image = UIImage(data: data),
+//                    let cgImage = image.cgImage,
+//                    let delegate = self.delegate,
+//                    let videoLayer = self.videoLayer else {
+//
+//                        return
+//                }
+//
+//                let rect   = videoLayer.metadataOutputRectConverted(fromLayerRect: videoLayer.bounds)
+//                let width  = CGFloat(cgImage.width)
+//                let height = CGFloat(cgImage.height)
+//
+//                let cropRect = CGRect(x: rect.origin.x * width,
+//                                      y: rect.origin.y * height,
+//                                      width: rect.size.width * width,
+//                                      height: rect.size.height * height)
+//
+//                guard let img = cgImage.cropping(to: cropRect) else {
+//
+//                    return
+//                }
+//
+//                let croppedUIImage = UIImage(cgImage: img, scale: 1.0, orientation: image.imageOrientation)
+        })
     }
 
     func saveImage(image: UIImage) -> URL? {
@@ -174,6 +220,17 @@ class CameraViewController: UIViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .landscape
+    }
+}
+
+extension CameraViewController: AVCapturePhotoCaptureDelegate {
+//    @available(iOS 11.0, *)
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+
+        if let photoSampleBuffer = photoSampleBuffer {
+            let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
+            preview.image = UIImage(data: photoData!)
+        }
     }
 }
 
