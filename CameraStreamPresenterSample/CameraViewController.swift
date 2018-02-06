@@ -76,9 +76,7 @@ class CameraViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.sessionQueue.async {
-            self.session.startRunning()
-        }
+        self.session.startRunning()
     }
 
     // Configuration
