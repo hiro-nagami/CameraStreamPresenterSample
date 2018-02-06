@@ -7,14 +7,51 @@
 //
 
 import Foundation
-import TOCropViewController
 import UIKit
-import AVKit
-import MobileCoreServices
 import Photos
+import AVFoundation
+import MobileCoreServices
+
+import TOCropViewController
+
+class PreviewView: UIImageView {
+
+    var videoPreviewLayer: AVCaptureVideoPreviewLayer {
+        let previewlayer = layer as! AVCaptureVideoPreviewLayer
+        previewlayer.videoGravity = .resizeAspect
+        return previewlayer
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.backgroundColor = .black
+    }
+
+    override class var layerClass : AnyClass {
+        return AVCaptureVideoPreviewLayer.self
+    }
+
+    var session: AVCaptureSession? {
+        get {
+            return videoPreviewLayer.session
+        }
+        set {
+            videoPreviewLayer.session = newValue
+        }
+    }
+}
 
 class CameraViewController: UIViewController {
+
+    // Camera Interface
     var presenter: CameraStreamPresenterProtocol
+    let preview = PreviewView()
+
+    let session = AVCaptureSession()
+    let sessionQueue = DispatchQueue(label: "session queue", attributes: [])
+
+    
+
     init(presenter: CameraStreamPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -26,30 +63,73 @@ class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .black
-        self.navigationController?.isNavigationBarHidden = true
+        self.checkAuthorizationAVCapture()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.presenter.isEditmode == false {
-            self.openCamera()
+        self.configureViews()
+        self.configureSession()
+        self.addPhotoOutput()
+        self.session.commitConfiguration()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.sessionQueue.async {
+            self.session.startRunning()
         }
     }
-    
-    func openCamera() {
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-            let picker = UIImagePickerController()
-            picker.modalPresentationStyle = .fullScreen
-            picker.sourceType = .camera
-            picker.mediaTypes = [kUTTypeMovie] as [String]
-            picker.delegate = self
-            picker.modalTransitionStyle = .crossDissolve
-            
-            self.present(picker, animated: true, completion: nil)
+
+    // Configuration
+    private func configureViews() {
+        self.navigationController?.isNavigationBarHidden = true
+
+        self.preview.frame = self.view.bounds
+        self.view.addSubview(self.preview)
+    }
+
+    private func configureSession() {
+        session.beginConfiguration()
+        session.sessionPreset = .hd1920x1080
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+            let deviceInput = try? AVCaptureDeviceInput(device: device),
+            session.canAddInput(deviceInput) else {
+                return
+        }
+
+        session.addInput(deviceInput)
+    }
+
+    private func addPhotoOutput() {
+        let videoOutput = AVCaptureVideoDataOutput()
+
+        if self.session.canAddOutput(videoOutput) {
+            self.session.addOutput(videoOutput)
+        }
+
+        self.preview.videoPreviewLayer.session = self.session
+    }
+
+    private func checkAuthorizationAVCapture() {
+        self.sessionQueue.suspend()
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized: break
+
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { [unowned self] isSuccess in
+                self.sessionQueue.resume()
+            })
+
+        default:
+            break
+        }
+
+        sessionQueue.async { [unowned self] in
+            self.configureSession()
         }
     }
-    
+
     func saveImage(image: UIImage) -> URL? {
         let fileManager = FileManager.default
         var newAssetURL: URL? = nil
@@ -69,7 +149,7 @@ class CameraViewController: UIViewController {
         
         return newAssetURL
     }
-    
+
     func saveVideo(fileUrl: URL) -> URL? {
         let fileManager = FileManager.default
         var newAssetURL: URL? = nil
@@ -148,3 +228,4 @@ extension CameraViewController: TOCropViewControllerDelegate {
         }
     }
 }
+
