@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         let playerVC = AVPlayerViewController()
         playerVC.view.frame = self.imageView.bounds
         playerVC.delegate = self
-        self.imageView.addSubview(playerVC.view)
+//        self.imageView.addSubview(playerVC.view)
         return playerVC
     }()
     
@@ -41,10 +41,10 @@ class ViewController: UIViewController {
     }
     
     @objc func tappedCameraButton() {
-        cameraPresenter.delegate = self
-        let cameraVC = CameraViewController(presenter: cameraPresenter)
-        let navCon = UINavigationController(rootViewController: cameraVC)
-        self.present(navCon, animated: true, completion: nil)
+        let cameraViewWireframe = CameraViewWireframe()
+        cameraViewWireframe.presentCamera(from: self)
+        cameraViewWireframe.output = self
+        cameraViewWireframe.imageSize = self.imageView.frame.size
     }
     
     func updateView() {
@@ -63,11 +63,15 @@ extension ViewController: CameraStreamPresenterDelegate {
     }
 }
 
+extension ViewController: CameraViewWireframeOutput {
+    func saveImage(image: UIImage) {
+        self.imageView.image = image
+    }
+}
+
 extension ViewController: AVPlayerViewControllerDelegate {
     func playerViewControllerDidStartPictureInPicture(_ playerViewController: AVPlayerViewController) {
         self.playerViewController.player?.play()
     }
-    
-    
 }
 
