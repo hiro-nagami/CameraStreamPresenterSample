@@ -1,0 +1,15 @@
+PODS:
+  - OpenCV (3.3.1)
+  - SwiftCamScanner (0.2.0):
+    - OpenCV
+
+DEPENDENCIES:
+  - SwiftCamScanner
+
+SPEC CHECKSUMS:
+  OpenCV: d81447860f038d60723084aa02ecc963f95c55fa
+  SwiftCamScanner: c15df5e700771f0fa8b37162e3e2c084f696faf8
+
+PODFILE CHECKSUM: 505ce97be9b110ab930f4e2c01effcf79bb5fa86
+
+COCOAPODS: 1.3.1

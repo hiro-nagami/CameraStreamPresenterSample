@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -67,6 +68,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
+        </scene>
+        <!--Crop View Controller-->
+        <scene sceneID="tSg-qY-hrX">
+            <objects>
+                <viewController storyboardIdentifier="CropViewController" id="U17-lA-KVW" customClass="CropViewController" customModule="CameraStreamPresenterSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="72k-dk-yiy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GNh-1X-pC1" customClass="CropView" customModule="SwiftCamScanner">
+                                <rect key="frame" x="0.0" y="20" width="375" height="500"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="GNh-1X-pC1" secondAttribute="height" multiplier="3:4" id="LCD-Fx-zrS"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="GNh-1X-pC1" firstAttribute="leading" secondItem="aYW-JI-Rg9" secondAttribute="leading" id="PRn-Ss-nbq"/>
+                            <constraint firstItem="aYW-JI-Rg9" firstAttribute="trailing" secondItem="GNh-1X-pC1" secondAttribute="trailing" id="nBh-8J-xDS"/>
+                            <constraint firstItem="GNh-1X-pC1" firstAttribute="top" secondItem="aYW-JI-Rg9" secondAttribute="top" id="vKl-p1-dp3"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="aYW-JI-Rg9"/>
+                    </view>
+                    <connections>
+                        <outlet property="cropView" destination="GNh-1X-pC1" id="EmL-wc-CDe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Dj-XP-JPO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="831.20000000000005" y="132.68365817091455"/>
         </scene>
     </scenes>
 </document>
